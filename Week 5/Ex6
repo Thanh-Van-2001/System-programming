@@ -1,0 +1,29 @@
+//Bài 6: Hãy viết chương trình tính tổng các digits của một số nguyên bất kì, Ví dụ số 2155 là 2 + 1 + 5 + 5 bằng 13. Trong đó số nguyên được 
+//i) Nhập từ bàn phím 
+//ii) Là đối của chương trình
+
+#include <stdio.h>
+#include <string.h>
+
+int cal(int n) {
+  	if (n < 10 && n > -10) return n;
+  	return n % 10 + cal(n / 10);
+}
+void main(int argc, char * argv[], char * env[]) {
+  	if (argc < 2) {
+    		printf("vui long nhap doi so n!");
+   		return;
+  	}
+  	int n;
+  	if (sscanf(argv[1], "%d", & n) != 1) {
+    		printf("vui long nhap so doi so la so");
+    		return;
+  	}
+	if(n < 0)
+           {
+           		n *= -1;
+           }
+
+  	printf("tong cac digits cua %d la %d\n", n, cal(n));
+  	return;
+}
