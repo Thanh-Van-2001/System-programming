@@ -1,0 +1,34 @@
+Bài 1 Viết chương trình ngôn ngữ C tạo một file có tên “vidu.doc” chứa nội dung 
+                            "Cong hoa Xa hoi chu nghia Vietnam 
+                              Doc lap tu do hanh phuc 
+                                     …………………. 
+                              Chung ta hoc ngon ngu C trong HĐH Unix"
+a) Nội dung được nhập từ bàn phím 
+b) Được lấy từ file “vd.txt”
+
+#include <stdio.h>
+#include <unistd.h>
+#include <stdlib.h>
+
+void main(int argc, char * argv[]) {
+  FILE * fp = fopen("vidu.doc", "w+"); // check access file vd.txt 
+  if (!fp) {
+    printf("error !");
+    exit(1);
+  }
+  if (access("vd.txt", F_OK) == 0) { // 
+    FILE * f2 = fopen("vd.txt", "r");
+    if (f2) {
+      char c;
+      while ((c = getc(f2)) != EOF) {
+        fwrite( & c, 1, 1, fp);
+      }
+      fclose(f2);
+    }
+  } else {
+    char data[1000];
+    fgets(data, 1000, stdin);
+    fputs(data, fp);
+  }
+  fclose(fp);
+}
