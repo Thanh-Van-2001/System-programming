@@ -1,0 +1,33 @@
+//Bài 2: Viết chương trình ngôn ngữ c tính nghiệm phương trình a.x + b = 0 với bất kỳ giá trị thực của a và b theo hai cách 
+//i) Nhập a, b từ bàn phím 
+//ii) a, b là số đối chương trình
+
+#include <stdio.h>
+#include <string.h>
+
+void main(int argc, char * argv[], char * env[]) {
+if (argc < 3) {
+          	printf("vui long nhap 2 doi so a va b!");
+           return;
+}
+
+double a,b;
+if (sscanf(argv[1], "%lf", & a) != 1 || sscanf(argv[2], "%lf", &b) != 1) {
+printf("vui long nhap so doi so la so");
+           return;
+}
+
+if (a == 0) {
+if (b == 0) {
+printf("nghiem cua phuong trinh\nx=0");
+                      return;
+}
+           printf("phuong trinh khong co nghiem");
+           return;
+
+}
+printf("nghiem cua phuong trinh\nx=%lf", -b / a);
+
+return;
+}
+
