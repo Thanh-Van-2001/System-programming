@@ -1,0 +1,17 @@
+//Bài 8. Hãy chỉ ra sự khác biệt và các đặc tính giữa các chuẩn ISO-C và POSIX dùng trong Cprogramming cho hệ điều hành Unix, lấy ví dụ.
+
+#include <unistd.h>
+#include <stdlib.h>
+#include<stdio.h>
+int main(int argc, char * argv[]) {
+  char buf[32];
+  if (argc != 2)
+    exit(-1);
+  printf("current value-for PATH = %s", getenv("PATH"));
+  sprintf(buf, "PATH=%s", argv[1]);
+  putenv(buf);
+  printf("new value for PATH = \"%s\•\n", getenv("PATH"));
+}
+
+
+
