@@ -1,0 +1,37 @@
+Bài 4 Không bao giờ nên sao chép một thư mục vào chính nó. Giả sử /a/b/c/ là thư mục - Được phép sao chép /a/b/c vào /a, nhưng không được phép sao chép /a/b vào /a/b/c/ 
+a) TẠI SAO? 
+b) Làm thế nào để xác định một thư mục nằm trong một thư mục khác? 
+c) Viết chương trình C để xác định xem một thư mục có nằm trong chính nó hay không.e
+
+#include <unistd.h>
+#include <stdio.h>
+#include <limits.h>
+#include <string.h>
+#include <stdlib.h>
+
+int main(int argc, char *argv[])
+{
+    char cwd[PATH_MAX];
+    // get pwd in current execute
+    // if (getcwd(cwd, sizeof(cwd)) != NULL)
+    // {
+    // printf("Current working dir: %s\n", cwd);
+
+    // }
+    if (argc < 3)
+    {
+        printf("dien du 2 tham so ");
+        exit(0);
+    }
+
+    if ( (argv[1], argv[2]) != NULL)
+    {
+        // contains
+        printf("contains");
+    }
+
+    return 0;
+}
+
+
+
