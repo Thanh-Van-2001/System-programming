@@ -1,0 +1,68 @@
+//Bài 4: Viết chương trình ngôn ngữ c đổi một số nguyên hệ đếm 10 sang hệ đếm #2/#8/#16 sao cho 
+//a) Đối 1 là hệ đếm cần chuyển đổi (ví dụ: #2 cho hệ đếm 2) 
+//b) Đối 2 là số theo hệ đếm 10
+
+#include <stdio.h>
+#include <string.h>
+
+void c10to2(int n) {
+if (n <= 0) {
+    		return;
+  	} else {
+    		c10to2(n / 2);
+    		printf("%d", n % 2);
+  	}
+}
+
+void c10to8(int n) {
+  	if (n <= 7) {
+    		printf("%d", n);
+  	} else {
+    		c10to8(n / 8);
+    		printf("%d", n % 8);
+  	}
+}
+void c10to16(int n) {
+ 	if (n <= 0) {
+    		return;
+  	} else {
+    		c10to16(n / 16);
+    		int remainder = n % 16;
+   		if (remainder < 10)
+      			printf("%c", 48 + remainder);
+    		else
+      			printf("%c", 55 + remainder);
+  		}
+}
+
+void main(int argc, char * argv[], char * env[]) {
+if (argc < 3) {
+    		printf("vui long nhap 2 doi so!\n");
+    	return;
+}
+
+int a, b;
+  	if (sscanf(argv[1], "%d", & a) != 1 || sscanf(argv[2], "%d", & b) != 1) {
+   		printf("vui long nhap so doi so la so\n");
+    		return;
+  	}
+
+  	switch (a) {
+  		case 2:
+    			printf("chuyen doi %d sang he %d:\n", b, a);
+    			c10to2(b);
+    			break;
+  		case 8:
+    			printf("chuyen doi %d sang he %d:\n", b, a);
+    			c10to8(b);
+    			break;
+  		case 16:
+    			printf("chuyen doi %d sang he %d:\n", b, a);
+    			c10to16(b);
+    			break;
+  		default:
+    			printf("vui long nhap doi so 1 la 2 or 8 or 16");
+  	}
+  	printf("\n");
+}
+
