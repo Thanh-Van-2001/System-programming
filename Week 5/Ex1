@@ -1,0 +1,11 @@
+//Bài 1: Viết chương trình ngôn ngữ c để tạo và hiển thị một bảng gồm các giá trị nguyên của n và n^2 nằm trong khoảng từ 1 đến 10. Hãy in các tiêu đề cột thích hợp.
+
+#include<stdio.h>
+
+int main(){
+	printf("stt\tn\tn^2\n");
+	for(int i=1; i<=10;i++){
+		printf("%d\t%d\t%d\n",i,i,i*i);
+	}
+}
+
