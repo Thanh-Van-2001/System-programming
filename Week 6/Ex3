@@ -1,0 +1,37 @@
+Bài 3 Viết chương trình ngôn ngữ C thay đổi 
+a) Quyền rwx của chủ sử hữu thành rw-
+#include <stdio.h>
+#include <stdlib.h>
+int main(int argc, char *argv[]) {
+        char cmd[256];
+        int ret = 0;
+
+        sprintf(cmd, "chmod -rw %s", argv[1]);
+
+        ret = system(cmd);
+        if (ret == 0) {
+                printf("Permissions of file changed successfully\n");
+        } else {
+                printf("Unable to change the permissions of file\n");
+        }
+
+        return 0;
+}
+b) Quyền chủ sở hữu từ qtuan sang minhth
+
+#include <sys/stat.h>
+#include <stdio.h>
+#include <unistd.h>
+#include <stdlib.h>
+
+void main(int argc, char *argv[])
+{
+    if (argc < 2)
+    {
+        printf("error !");
+        exit(0);
+    }
+
+    char *fd = "vd.txt";
+    chmod(fd,0666);
+}
