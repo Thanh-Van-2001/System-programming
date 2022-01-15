@@ -1,0 +1,18 @@
+//Bài 5. Chương trình C hoàn toàn hợp lệ sau đây được viết mà không chú ý nhiều đến định dạng của nó. Hãy định dạng lại chương trình để dễ đọc hơn. Sau đó nhập chương trình vào máy tính và chạy nó.
+
+#include <stdio.h> 
+
+int main(void) 
+{  
+int n, two_to_the_n;  
+   	printf("TABLE OF POWERS OF TWO\n\n");  
+   	printf(" n=2\tto the n\n");  
+   	printf(" --\t---------\n");  
+   	two_to_the_n = 1;  
+   	for (n=0; n<=10; ++n) 
+        	{ 
+printf(" %2i\t%i\n", n, two_to_the_n);  
+          		two_to_the_n *= 2;  
+         	}  
+   	return 0; 
+} 
