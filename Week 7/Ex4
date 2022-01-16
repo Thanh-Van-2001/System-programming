@@ -1,0 +1,31 @@
+//Bài 4. Hãy tham khảo hướng dẫn slide 24 để viết chương trình C với hoạt động của hai tiến trình trao đổi qua đường ống. Giả sử cmd1 là tiến trình bài 3 (tính n!) và cmd2 là bài 1 (tính n2 ) của bài tập 5.
+#include <sys/types.h>
+#include <sys/wait.h>
+#include <unistd.h>
+#include <string.h>
+#include <stdlib.h>
+#include <stdio.h>
+#define CMDSIZ 32
+
+extern char **environ;
+int main(int argc, char *argv[] )
+{
+
+        int pd[2], pid;
+        pipe(pd);
+        pid = fork();
+        if (pid)
+        { close(pd[0]);
+                //close(1);
+                dup(pd[1]); // replace 1 with pd[1]
+                close(pd[1]); // close pd[1]
+                execlp("./giaithua","./giaithua",argv[1],NULL);
+        } else
+        { close(pd[1]); // READER MUST close pd[1]
+        //      close(0);
+                dup(pd[0]); // replace 0 with pd[0]
+                close(pd[0]); // close pd[0]
+                execlp("./binhphuong","./binhphuong",argv[1],NULL);
+                //exit(0);
+        }
+        return 0;}
