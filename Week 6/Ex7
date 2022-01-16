@@ -1,0 +1,49 @@
+Bài 7  Viết chương trình ngôn ngữ C có tên unixcd.c giả lập lệnh “cd” của shell
+#include <stdio.h>
+#include <stdlib.h>
+#include <sys/stat.h>
+#include <unistd.h>
+int main(int argc,char *argv[])
+{
+        int temp;
+        struct stat buf;
+        char directory[255];
+        if(argc < 2)
+        {
+                printf("No directory to move to\n");
+        }
+        else if(argc > 2)
+        {
+                printf("Too many arguments\n");
+        }
+        else
+        {
+
+                if(lstat(argv[1],&buf)<0)
+                {
+                        printf("Error fetching stats\n");
+                }
+                else
+                {
+                        if(S_ISDIR(buf.st_mode))
+                        {
+                                temp = chdir(argv[1]);
+                                if(temp < 0)
+                                {
+                                        printf("Error changing dir");
+                                }
+                                getcwd(directory,255);
+                                printf("%s\n",directory);
+                        }
+                        else
+                        {
+                                printf("Not a directory\n");
+                        }
+
+                }
+        }
+        return 0;
+}
+
+
+
