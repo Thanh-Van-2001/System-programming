@@ -1,0 +1,26 @@
+//Bài 6. Viết chương trình C liên tục kiểm tra usr() truy cập sử dụng ngắt định kỳ 1 phút và thông báo. Chấm dứt khi bấm phím CTRL-C
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <unistd.h>
+#include <signal.h>
+void custom_handler(int signum)
+{
+    printf("Caught signal %d, coming out Program\n", signum);
+    exit(1);
+}
+int main()
+{
+    signal(SIGINT, custom_handler);
+    while(1)
+    {
+   	 FILE *fp;
+fp = popen("users", "r");
+   	 char buffer[200];
+   	 while(fgets(buffer, 100, fp) != NULL)
+   	printf("%s", buffer);
+   	 sleep(60);
+    }
+    return 0;
+}
