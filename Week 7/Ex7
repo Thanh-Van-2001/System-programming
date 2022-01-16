@@ -1,0 +1,59 @@
+//Bài 7. Viết chương trình C để sử dụng lệnh ngắt định kỳ sau khoảng thời gian () hoặc 
+//+ được nhập từ bàn phím 
+//+ từ đối chương trình (argv[1], argv[2]) 
+//thông báo “Working …” trên màn hình. Chấm dứt khi bấm phím CTRL-C
+
+#include <unistd.h>
+#include <sys/time.h>
+#include <stdlib.h>
+#include <signal.h>
+#include <stdio.h>
+
+void handler(int sig)
+{
+        if(sig == SIGINT)
+        {
+                printf("Signal detected - using Ctrl+C\n");
+                exit(1);
+        }
+        if(sig == SIGALRM)
+        {
+                printf("Working...\n");
+        }
+}
+
+int main(int argc, char *argv[], char *envp[])
+{
+        struct itimerval rttimer;
+        struct itimerval old_rttimer;
+
+        signal(SIGALRM, handler);
+        signal(SIGINT, handler);
+
+        int time;
+        if(argc < 2)
+        {
+                printf("No arguments; switching to manual mode...\n");
+                sleep(1);
+                printf("Enter time: ");
+                scanf("%d", &time);
+                printf("Set up time = %d\n", time);
+        }
+        else
+        {
+                printf("Argument detected: time = %d\n", atoi(argv[1]));
+     time = atoi(argv[1]);
+        }
+        rttimer.it_value.tv_sec = time; //seconds
+        rttimer.it_value.tv_usec = 0;
+        rttimer.it_interval.tv_sec = time; //seconds
+        rttimer.it_interval.tv_usec = 0;
+
+        setitimer(ITIMER_REAL, &rttimer, &old_rttimer);
+        while(1)
+        {
+                sleep(100);
+        }
+        return 0;
+}
+
