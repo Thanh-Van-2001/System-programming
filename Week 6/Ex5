@@ -1,0 +1,29 @@
+Hãy sửa (modify) chương trình trong slide 3 để tạo nhiều thư mục trong một lần chương trình ví dụ $a.out dir1 dir2 dir3 … dirn
+
+#include <stdio.h>
+#include <errno.h>
+#include <stdlib.h>
+
+int main(int argc, char *argv[])
+{
+
+    if (argc < 2)
+    {
+        printf("dien du tham so ");
+        exit(0);
+    }
+
+    char buf[256], *s;
+
+    int r;
+
+    for (int i = 1; i < argc; i++)
+    {
+
+        r = mkdir(argv[i], 0766); // mkdir syscall
+        if (r < 0)
+            printf("errno=%d : %s\n", errno, strerror(errno));
+    }
+}
+
+
