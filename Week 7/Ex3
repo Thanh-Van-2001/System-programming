@@ -1,0 +1,52 @@
+//Bài 3. Hãy tham khảo chương trình tại slide 23 để viết chương trình C có tiến trình parent cho phép vận hành tiến trình child của người dùng tại thư mục hiện hành 
+//Chỉ chạy được mấy lệnh shell như ls, date… Không chạy được chương trình của người dùng
+#include <sys/types.h>
+#include <sys/wait.h>
+#include <unistd.h>
+#include <string.h>
+#include <stdlib.h>
+#define CMDSIZ 32
+extern char **environ;
+void process_command(char *cmdbuf)
+{
+        int pid, sloc;
+        pid = fork();
+        if (pid < 0)
+                write(2, "no more processes\n", 18);
+        else if (pid == 0)
+        { /* child */
+                char *cmd;
+                char *arg1;
+                char *arg2;
+                char *arg3;
+
+                cmd = strtok(cmdbuf," ");
+                arg1 = strtok(NULL," ");
+                arg2 = strtok(NULL," ");
+                arg3 = strtok(NULL," ");
+                if (execle(cmd, cmd, arg1, arg2, arg3, NULL, environ) < 0)
+                {
+                        printf("This command failed\n");
+                        exit(-1);
+                }
+        }
+        else
+        { /* parent */
+                wait(&sloc);
+        }
+}
+int main(int argc, char *argv[] )
+{
+        int logout=0, cmdsiz;
+        char cmdbuf[CMDSIZ];
+        while(!logout)
+        {
+                write (1, "myshell> ", 9) ;
+                cmdsiz = read(0, cmdbuf, CMDSIZ) ;
+                cmdbuf[cmdsiz-1] = '\0' ;
+                if (strcmp("logout", cmdbuf) == 0)
+                        ++logout;
+                else
+                        process_command(cmdbuf);
+        }
+}
