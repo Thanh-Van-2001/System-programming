@@ -1,0 +1,22 @@
+//Bài 2. Hãy tham khảo chương trình tại slide 23 để viết chương trình C có tiến trình parent cho phép vận hành tiến trình child dựa trên các lệnh shell trong thư mục /sbin (Ví dụ ls, date ..)
+
+#include <stdio.h>
+#include <string.h>
+#include <unistd.h>
+
+int main(int argc, char * argv[]) {
+  char * binary_path = "/bin/bash";
+  // execle() System call can able to access
+  // the envp environment variables.
+  printf("%s", argv[1]);
+  char * arg2 = "";
+  if (argc < 2) {
+    printf("nhap doi so");
+    return 0;
+  } else if (argc == 3) {
+    arg2 = argv[2];
+  }
+  //binary_path = strcat (binary_path,argv[1]);
+  execle(binary_path, binary_path, "-c", argv[1], NULL, NULL);
+  return 0;
+}
