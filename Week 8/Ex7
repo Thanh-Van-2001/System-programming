@@ -1,0 +1,78 @@
+Bài 7. Hãy viết chương trình C có tiến trình lọc ký tự (bài 9/bt6 - giả lệnh grep) từ các file với các luồng sao cho mỗi luồng làm việc với 1 file.
+
+#include <stdlib.h>
+#include <string.h>
+#include <unistd.h>
+#include <sys/stat.h>
+#include <pthread.h>
+#include <stdio.h>
+
+char *filterWord;
+
+void* grep(void* arg)
+{
+
+        FILE *f=fopen(arg,"r");
+        char temp[255];                 //String with grep word
+        char *p;
+
+        fgets(temp, 255, f);
+        while(!feof(f))
+        {
+                p = strstr(temp,filterWord);
+                if(p)
+                {
+                        printf("%s:%s", (char*)arg, temp);
+                }
+                fgets(temp, 255, f);
+        }
+
+        pthread_exit(0);
+}
+
+int main(int argc, char *argv[])
+{
+        pthread_t t[argc-2];
+        if(argc<3)
+        {
+                printf("Not enough arguments\n");
+                exit(-1);
+        }
+        struct stat buf;
+        int i;
+        for(i=2;i<argc;i++)
+        {
+                if(access(argv[i],F_OK)!=0)
+                {
+                        printf("No such file as %s\n", argv[i]);
+                        exit(-1);
+                }
+                if(lstat(argv[i],&buf)<0)
+                {
+                        printf("Error with stat %s\n", argv[i]);
+                        exit(-1);
+                }
+                if(S_ISDIR(buf.st_mode))
+                {
+                        printf("%s is a directory\n", argv[i]);
+                        exit(-1);
+                }
+        }
+        filterWord = argv[1];
+        for (i = 2; i < argc; i++)
+        {
+                if (pthread_create(&t[i-2], NULL, grep, argv[i]) < 0)
+                {
+                        printf("Error creating thread");
+                        exit(-1);
+                }
+        }
+        for (i = 0; i < argc - 2; i++)
+        {
+                pthread_join(t[i], NULL);
+        }
+        return 0;
+}
+
+
+
