@@ -1,0 +1,62 @@
+Bài 4. Viết lại bài tập 8.2 sao cho mỗi luồng tính tổng của hàng (cột) rồi cố gắng cập nhật vào biến sum toàn cục. (Gợi ý: phải đồng bộ bằng khóa mutex đảm bảo rằng chỉ một luồng có thể cập nhật biến sum tại một thời điểm.)
+Như bài 2, nhưng làm với Threads
+
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <unistd.h>
+#include <pthread.h>---
+pthread_mutex_t m;
+int sum = 0;
+
+void* row_result(void* arg)
+{
+        pthread_mutex_lock(&m);
+
+        int *temp = (int*) arg;
+
+        for (int i = 0; i < 5; i++) {
+                sum += temp[i];
+        }
+
+        pthread_mutex_unlock(&m);
+        pthread_exit(0);
+}
+
+int main()
+{
+        pthread_t t[5];
+
+        pthread_mutex_init(&m, NULL);
+
+        int result_master = 0;
+
+        int matrix[5][5];
+        int (*p[5])[5];
+
+        for (int i = 0; i < 5; i++) {
+                printf("Line %d of 5*5 matrix:\n", i + 1);
+                for (int j = 0; j < 5; j++) {
+                        printf("Enter member at column %d of this row: ", j + 1);
+                        scanf("%d", &matrix[i][j]);
+                }
+        }
+
+        for (int i = 0; i < 5; i++) {
+                p[i] = &matrix[i];
+        }
+
+        for (int i = 0; i < 5; i++) {
+                pthread_create(&t[i], NULL, row_result, (void*) p[i]);
+        }
+
+        for (int i = 0; i < 5; i++) {
+                pthread_join(t[i], NULL);
+        }
+
+        printf("Sum of matrix: %d\n", sum);
+
+        pthread_mutex_destroy(&m);
+
+        return 0;
+}
