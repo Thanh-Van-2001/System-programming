@@ -1,0 +1,30 @@
+Bài 5
+Hãy viết chương trình C có tiến trình dựa trên các luồng (thread) để tìm phần tử lớn nhất trong ma trận 5* 5 của bài 8.2.-
+
+#include<stdio.h>
+#include<unistd.h>
+#include<sys/stat.h>
+#include<stdlib.h>
+#include<signal.h>
+#include<pthread.h>
+#include<limits.h>
+
+int arr[5][5] = { {1,19,12, -1,-6}, {9,7,5,3,-4}, {7,2,4,9,-3}, {-4,7,8,-2,5}, {2,-5,-4,12,7}, };
+int max_vjp = INT_MIN;
+void * tim_lon(void *arg) {
+         int max = *((int *)arg +0);
+          for(int i=0;i<5;i++) {
+                   if(max < *((int *)arg +i)) {
+                           max = *((int *)arg +i); }
+          } if(max_vjp < max) { max_vjp = max; }
+}
+ int main(int argc, char argv[]) {
+         pthread_t t[5];
+         for (int i = 0; i < 5; i++) {
+                 pthread_create(&t[i],NULL,tim_lon,(arr + i));
+         }
+         for (int i = 0; i < 5; i++) {
+                 pthread_join(t[i],NULL); }
+         printf("so lon nhat la :%d\n",max_vjp);
+         return 0; }
+
