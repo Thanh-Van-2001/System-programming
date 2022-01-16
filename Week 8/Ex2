@@ -1,0 +1,40 @@
+Bài 2. Hãy viết chương trình C có tiến trình dựa trên các luồng (thread) tính tổng của các phần tử trong ma trận 5* 5
+
+
+#include <stdio.h>
+#include <unistd.h>
+#include <stdlib.h>
+#include <string.h>
+#include <pthread.h>
+int ar[][5] = {{1, 19, 12, -1, -6},{9, 7, 5, 3,-4 },{7, 2, 4, 9, -3},{ -4, 7, 8, -2, 5 },{2, -5, -4, 12, 7}};
+int sum[] = {0,0,0,0,0};
+
+
+void *sum_row(void *i) {
+ int row = *((int *) i);
+//printf("%d\n",row);
+	for(int i = 0;i< 5;i++){
+sum[row] += ar[row][i];
+} 
+}
+
+int main() {
+  int res;
+  pthread_t tid[5];
+  for (int i = 0; i < 5; i++) {
+    int *arg = malloc(sizeof( * arg));
+    * arg = i;
+    pthread_create( & tid[i], NULL, sum_row, arg);
+  }
+
+  for (int i = 0; i < 5; i++) {
+    pthread_join(tid[i], NULL);
+  }
+  int result = 0;
+  for (int i = 0; i < 5; i++) {
+    //printf("%d\n",sum[i]);
+    result += sum[i];
+  }
+  printf("tong cua mang la: %d\n", result);
+  return 0;
+}
