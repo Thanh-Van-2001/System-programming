@@ -1,0 +1,56 @@
+Bài 5. Chương trình spy nằm ẩn (pause), chỉ hoạt động khi được kích hoạt bằng báo hiệu. Hãy viết chương trình C nằm ngủ và chỉ kích hoạt hoạt động khi có báo hiệu USR1 để loại bỏ tiến trình có pid = 1234. Chấm dứt khi bấm phím CTRL-C 
+
+//Không chắc lắm đâu
+#include <stdio.h>
+#include <unistd.h>
+#include <stdlib.h>
+#include <signal.h>
+#include <sys/time.h>
+
+void CUSTOM_HANDLER(int);
+int main ()
+{
+        struct itimerval rttimer;
+        struct itimerval old_rttimer;
+
+        signal(SIGINT, CUSTOM_HANDLER);
+        signal(SIGUSR1, CUSTOM_HANDLER);
+        signal(SIGALRM, CUSTOM_HANDLER);
+
+        rttimer.it_value.tv_sec = 3; //seconds
+        rttimer.it_value.tv_usec = 0;
+        rttimer.it_interval.tv_sec = 3; //seconds
+        rttimer.it_interval.tv_usec = 0;
+        setitimer (ITIMER_REAL, &rttimer, &old_rttimer);
+
+        signal(SIGINT, CUSTOM_HANDLER);
+        signal(SIGUSR1, CUSTOM_HANDLER);
+        signal(SIGALRM, CUSTOM_HANDLER);
+
+        while(1)
+        {
+                pause();
+        }
+        return 0;
+}
+
+void CUSTOM_HANDLER(int signum)
+{
+        if(signum == SIGUSR1)
+        {
+                if(kill(1234, SIGKILL) < 0)
+                {
+                        printf("Failed to terminate 1234\n");
+                }
+        }
+        if(signum == SIGALRM)
+        {
+                raise(SIGUSR1);
+        }
+        if(signum == SIGINT)
+        {
+                printf("Caught signal %d, coming out fromProgram\n", signum);
+                exit(1);
+        }
+}
+
